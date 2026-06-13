@@ -1,14 +1,15 @@
- FROM node:22-alpine
+FROM node:24-alpine
 
- WORKDIR /usr/src/app
+WORKDIR /usr/src/app
 
- COPY ./package* ./
+COPY package* .
+COPY ./frontend/package*.json ./frontend/
+COPY ./backend/package*.json ./backend/
 
- RUN npm ci 
+RUN npm ci 
 
- COPY . .
+COPY . .
 
- RUN "npm run build && npm run start"
+RUN npm run build
 
-
-
+CMD ["npm","run","start"]
