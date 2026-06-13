@@ -1,0 +1,14 @@
+{
+  "name": "moviesclub-shared",
+  "version": "1.0.0",
+  "description": "Shared Types",
+  "license": "ISC",
+  "type": "module",
+  "main": "index.ts",
+  "exports": {
+    "./api": "./api.schema.ts",
+    "./auth": "./auth.schema.ts",
+    "./social": "./social.schema.ts",
+    "./movies": "./movies.schema.ts"
+  }
+}

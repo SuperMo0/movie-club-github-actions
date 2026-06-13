@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model user {
+  id         String    @id @default(uuid())
+  username   String    @unique
+  password   String
+  name       String
+  image      String?
+  bio        String?
+  joinedAt   DateTime  @default(now())
+  comments   comment[]
+  posts      post[]
+  following  user[]    @relation("UserFollow")
+  followedBy user[]    @relation("UserFollow")
+  likedPosts post[]    @relation("user_like_post")
+  watchList  movie[]   @relation("user_watch_list")
+}
+
+model post {
+  id         String    @id @default(uuid())
+  content    String?
+  image      String?
+  authorId   String
+  createdAt  DateTime  @default(now())
+  rating     Int?
+  movieTitle String?
+  comments   comment[]
+  author     user      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likedBy    user[]    @relation("user_like_post")
+
+  @@index([authorId, createdAt])
+}
+
+model movie {
+  id          String  @id @default(uuid())
+  sourceId    String  @unique
+  title       String
+  description String?
+  image       String
+  genres      genre[] @relation("movie_genre")
+  watchListBy user[]  @relation("user_watch_list")
+}
+
+model comment {
+  id        String   @id @default(uuid())
+  content   String
+  authorId  String
+  postId    String
+  createdAt DateTime @default(now())
+  author    user     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  post      post?    @relation(fields: [postId], references: [id])
+
+  @@index([postId, createdAt])
+  @@index([authorId, createdAt])
+}
+
+model genre {
+  id     String  @id @default(uuid())
+  name   String  @unique
+  movies movie[] @relation("movie_genre")
+}
+
+model app_state {
+  key   String @id
+  value String
+}

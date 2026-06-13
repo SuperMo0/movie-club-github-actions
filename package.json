@@ -1,0 +1,30 @@
+{
+  "name": "movieclub",
+  "version": "1.0.0",
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "homepage": "https://github.com/SuperMo0/MoviesClub#readme",
+  "bugs": {
+    "url": "https://github.com/SuperMo0/MoviesClub/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SuperMo0/MoviesClub.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "engines": {
+    "node": "24.12.0"
+  },
+  "workspaces": [
+    "backend",
+    "frontend",
+    "shared"
+  ],
+  "scripts": {
+    "build": "npm run build -w backend && npm run build -w frontend",
+    "start": "npm run start -w backend",
+    "lint:backend": "npm run lint -w backend"
+  }
+}

@@ -1,0 +1,50 @@
+services:
+
+  installer:
+    image: node:alpine
+    volumes:
+      - ./:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    working_dir: /usr/src/app
+    command: sh -c "npm ci"
+
+  frontend:
+    image: node:alpine
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    ports:
+      - 5173:5173
+    working_dir: /usr/src/app
+    command: sh -c "npm run dev -w frontend --host"
+    depends_on:
+      backend:
+        condition: service_started
+      installer:
+        condition: service_completed_successfully
+
+  backend:
+    image: node:alpine 
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/db
+    working_dir: /usr/src/app
+    command: sh -c "cd ./backend && npx prisma migrate dev --name initial && npx prisma generate && npm run dev"
+    depends_on:
+      db:
+        condition: service_started
+      installer:
+        condition: service_completed_successfully
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: db
+volumes:
+  node_modules:
+
