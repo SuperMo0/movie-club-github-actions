@@ -6,6 +6,7 @@ on:
       - main
 
 jobs:
+
   build:  # name of the job
     runs-on: ubuntu-latest
 
@@ -28,8 +29,8 @@ jobs:
         context: .
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/movie-club:latest
-
-    - name: Deploy to Render
+        
+  - name: Deploy to Render
     uses: gh-actions-workflows/deploy-docker-render@v1.1
     with:
       deploy-hook: ${{ secrets.RENDER_DEPLOY_HOOK }}
