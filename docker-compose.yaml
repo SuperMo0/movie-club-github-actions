@@ -1,5 +1,4 @@
 services:
-
   installer:
     image: node:alpine
     volumes:
